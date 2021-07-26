@@ -22,4 +22,20 @@ export default class GotService {
   getCharater(id) {
     return this.getResourse(`/characters/${id}`);
   }
+
+  getAllBooks() {
+    return this.getResourse('/books?page=1&pageSize=10');
+  }
+
+  getBook(id) {
+    return this.getResourse(`/books/${id}`);
+  }
+
+  getAllHouses() {
+    return this.getResourse('/houses');
+  }
+
+  getHouse(id) {
+    return this.getResourse(`/houses/${id}`);
+  }
 }
