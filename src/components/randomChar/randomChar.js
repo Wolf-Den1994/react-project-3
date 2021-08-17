@@ -4,6 +4,8 @@ import GotService from '../../services/gotService';
 import Spinner from '../spinner';
 import ErrorMessage from '../errorMessage';
 
+const dataNotFound = 'Sorry! Data not found :(';
+
 const RandomBlock = styled.div`
   background-color: #fff;
   padding: 25px 25px 15px 25px;
@@ -46,8 +48,8 @@ export default class RandomChar extends Component {
   };
 
   updateChar() {
-    // const id = Math.floor(Math.random() * 140 + 25); // 25 - 140
-    const id = 1223333333333333
+    const id = Math.floor(Math.random() * 140 + 25); // 25 - 140
+    // const id = 1223333333333333
     this.gotService
       .getCharater(id)
       .then(this.onCharLoaded)
@@ -75,23 +77,23 @@ const View = ({ char }) => {
   const { name, gender, born, died, culture } = char;
   return (
     <>
-      <h4>Random Character: {name}</h4>
+      <h4>Random Character: {name || dataNotFound}</h4>
       <ul className="list-group list-group-flush">
         <li className="list-group-item d-flex justify-content-between">
           <Term>Gender</Term>
-          <span>{gender}</span>
+          <span>{gender || dataNotFound}</span>
         </li>
         <li className="list-group-item d-flex justify-content-between">
           <Term>Born</Term>
-          <span>{born}</span>
+          <span>{born || dataNotFound}</span>
         </li>
         <li className="list-group-item d-flex justify-content-between">
           <Term>Died</Term>
-          <span>{died}</span>
+          <span>{died || dataNotFound}</span>
         </li>
         <li className="list-group-item d-flex justify-content-between">
           <Term>Culture</Term>
-          <span>{culture}</span>
+          <span>{culture || dataNotFound}</span>
         </li>
       </ul>
     </>
