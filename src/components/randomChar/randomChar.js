@@ -24,17 +24,21 @@ const Term = styled.span`
 `;
 
 export default class RandomChar extends Component {
-  constructor() {
-    super();
-    this.updateChar();
-  }
-
   gotService = new GotService();
   state = {
     char: {},
     loading: true,
     error: false,
   };
+
+  componentDidMount() {
+    this.updateChar();
+    this.timeId = setInterval(this.updateChar, 5000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timeId);
+  }
 
   onCharLoaded = (char) => {
     this.setState({ char, loading: false });
@@ -47,14 +51,14 @@ export default class RandomChar extends Component {
     });
   };
 
-  updateChar() {
+  updateChar = () => {
     const id = Math.floor(Math.random() * 140 + 25); // 25 - 140
     // const id = 1223333333333333
     this.gotService
       .getCharater(id)
       .then(this.onCharLoaded)
       .catch(this.onError);
-  }
+  };
 
   render() {
     const { char, loading, error } = this.state;

@@ -1,39 +1,52 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import { Col, Row, Container } from 'reactstrap';
 import Header from '../header';
 import RandomChar from '../randomChar';
-import ItemList from '../itemList';
-import CharDetails from '../charDetails';
 import Button from '../button/Button';
+import ErrorMessage from '../errorMessage';
+import CharacterPage from '../characterPage/CharacterPage';
 
-const App = () => {
-  const [randomChar, setRandomChar] = useState(true);
-  const toggleRandomCharacter = () => setRandomChar((state) => !state);
-  return (
-    <>
-      <Container>
-        <Header />
-      </Container>
-      <Container>
-        <Row>
-          <Col lg={{ size: 5, offset: 0 }}>
-            {randomChar ? <RandomChar /> : null}
-            <Button onClick={toggleRandomCharacter}>
-              Toggle random character
-            </Button>
-          </Col>
-        </Row>
-        <Row>
-          <Col md="6">
-            <ItemList />
-          </Col>
-          <Col md="6">
-            <CharDetails />
-          </Col>
-        </Row>
-      </Container>
-    </>
-  );
-};
+export default class App extends Component {
+  state = {
+    randomChar: true,
+    error: false,
+  };
 
-export default App;
+  componentDidCatch() {
+    this.setState({
+      error: true,
+    });
+  }
+
+  toggleRandomCharacter = () =>
+    this.setState((state) => {
+      return { randomChar: !state.randomChar };
+    });
+
+  render() {
+    if (this.state.error) {
+      return <ErrorMessage />;
+    }
+
+    return (
+      <>
+        <Container>
+          <Header />
+        </Container>
+        <Container>
+          <Row>
+            <Col lg={{ size: 5, offset: 0 }}>
+              {this.state.randomChar ? <RandomChar /> : null}
+              <Button onClick={this.toggleRandomCharacter}>
+                Toggle random character
+              </Button>
+            </Col>
+          </Row>
+          <CharacterPage />
+          <CharacterPage />
+          <CharacterPage />
+        </Container>
+      </>
+    );
+  }
+}
