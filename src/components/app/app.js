@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
 import { Col, Row, Container } from 'reactstrap';
-import Header from '../header';
-import RandomChar from '../randomChar';
+import Header from '../header/header';
+import RandomChar from '../randomChar/randomChar';
 import Button from '../button/Button';
-import ErrorMessage from '../errorMessage';
-import CharacterPage from '../characterPage/CharacterPage';
+import ErrorMessage from '../errorMessage/errorMessage';
+import CharacterPage from '../../pages/CharacterPage';
+import HousesPage from '../../pages/HousesPage';
+import GotService from '../../services/gotService';
+import BooksPage from '../../pages/BooksPage';
 
 export default class App extends Component {
+  gotService = new GotService();
+
   state = {
     randomChar: true,
     error: false,
@@ -43,8 +48,8 @@ export default class App extends Component {
             </Col>
           </Row>
           <CharacterPage />
-          <CharacterPage />
-          <CharacterPage />
+          <BooksPage />
+          <HousesPage />
         </Container>
       </>
     );

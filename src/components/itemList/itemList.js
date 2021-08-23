@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import GotService from '../../services/gotService';
 import styled from 'styled-components';
-import Spinner from '../spinner';
-import ErrorMessage from '../errorMessage';
+import Spinner from '../spinner/spinner';
+import ErrorMessage from '../errorMessage/errorMessage';
 
 const ListGroupItem = styled.li`
   cursor: pointer;
@@ -11,13 +10,11 @@ const ListGroupItem = styled.li`
 export default class ItemList extends Component {
   constructor() {
     super();
-    this.id = 41;
+    this.id = null;
   }
 
-  gotService = new GotService();
-
   state = {
-    charList: null,
+    itemList: null,
     error: false,
   };
 
@@ -28,12 +25,14 @@ export default class ItemList extends Component {
   }
 
   componentDidMount() {
-    this.gotService.getAllCharaters().then((charList) => {
+    const { getData } = this.props;
+
+    getData().then((itemList) => {
       this.setState((state) => {
-        const newState = charList.map((item) => {
+        const newState = itemList.map((item) => {
           return { ...item, id: this.id++ };
         });
-        const result = { ...state, charList: newState };
+        const result = { ...state, itemList: newState };
         return result;
       });
     });
@@ -41,31 +40,32 @@ export default class ItemList extends Component {
 
   renderItems(arr) {
     return arr.map((item) => {
-      const { id, name } = item;
+      const { id } = item;
+      const labal = this.props.renderItem(item);
       return (
         <ListGroupItem
           key={id}
           className="list-group-item"
-          onClick={() => this.props.onCharSelected(id)}
+          onClick={() => this.props.onItemSelected(id)}
         >
-          {name}
+          {labal}
         </ListGroupItem>
       );
     });
   }
 
   render() {
-    const { charList, error } = this.state;
+    const { itemList, error } = this.state;
 
     if (error) {
       return <ErrorMessage />;
     }
 
-    if (!charList) {
+    if (!itemList) {
       return <Spinner />;
     }
 
-    const items = this.renderItems(charList);
+    const items = this.renderItems(itemList);
 
     return <ul className="item-list list-group">{items}</ul>;
   }

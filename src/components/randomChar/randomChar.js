@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import GotService from '../../services/gotService';
-import Spinner from '../spinner';
-import ErrorMessage from '../errorMessage';
+import Spinner from '../spinner/spinner';
+import ErrorMessage from '../errorMessage/errorMessage';
 
 const dataNotFound = 'Sorry! Data not found :(';
 
