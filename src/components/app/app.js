@@ -8,9 +8,10 @@ import CharacterPage from '../../pages/CharacterPage';
 import HousesPage from '../../pages/HousesPage';
 import GotService from '../../services/gotService';
 import BooksPage from '../../pages/BooksPage';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import BooksItem from '../../pages/BooksItem';
 import './app.css';
+import NotFound from '../../pages/NotFound';
 
 export default class App extends Component {
   gotService = new GotService();
@@ -51,28 +52,26 @@ export default class App extends Component {
                 </Button>
               </Col>
             </Row>
-            <Route
-              path="/"
-              exact
-              component={() => (
-                <h1 style={{ color: '#fff' }}>Welcome to GOT DB</h1>
-              )}
-            />
-            <Route path="/character" component={CharacterPage} />
-            <Route path="/houses" component={HousesPage} />
-            <Route path="/books" exact component={BooksPage} />
-            <Route
-              path="/books/:id"
-              render={({ match }) => {
-                // render={({match, location, history}) => {
-                // match - объект с данными о том как именно path совпал с текущим адресом и там есть параметр id
-                // location - состояние и положение роутера в текущий момент
-                // history - api для организации перехода между страницами
-                // console.log(match, location, history)
-                const { id } = match.params;
-                return <BooksItem bookId={id} />;
-              }}
-            />
+            <Switch>
+              <Route
+                path="/"
+                exact
+                component={() => (
+                  <h1 style={{ color: '#fff' }}>Welcome to GOT DB</h1>
+                )}
+              />
+              <Route path="/character" exact component={CharacterPage} />
+              <Route path="/houses" exact component={HousesPage} />
+              <Route path="/books" exact component={BooksPage} />
+              <Route
+                path="/books/:id"
+                render={({ match }) => {
+                  const { id } = match.params;
+                  return <BooksItem bookId={id} />;
+                }}
+              />
+              <Route path="*" component={NotFound} />
+            </Switch>
           </Container>
         </div>
       </Router>
