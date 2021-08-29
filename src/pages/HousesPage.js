@@ -31,6 +31,7 @@ export default class BooksPage extends Component {
     const itemList = (
       <ItemList
         getData={this.gotService.getAllHouses}
+        // onItemSelected={this.onItemSelected}
         onItemSelected={this.onItemSelected}
         renderItem={({ name }) => name}
       />

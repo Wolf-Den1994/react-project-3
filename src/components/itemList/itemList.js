@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import Spinner from '../spinner/spinner';
 import ErrorMessage from '../errorMessage/errorMessage';
+import PropTypes from 'prop-types';
 
 const ListGroupItem = styled.li`
   cursor: pointer;
@@ -16,6 +17,14 @@ export default class ItemList extends Component {
   state = {
     itemList: null,
     error: false,
+  };
+
+  static defaultProps = {
+    onItemSelected: () => {},
+  };
+
+  static propTypes = {
+    onItemSelected: PropTypes.func,
   };
 
   componentDidCatch() {
