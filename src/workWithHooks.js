@@ -9,8 +9,8 @@ const NewApp = () => {
     <div className="hooooks">
       <p>Вы кликнули {count} раз</p>
       <button onClick={() => setCount(count + 1)}>Кликни меня</button>
-      {data.map((item) => (
-        <div>
+      {data.map((item, index) => (
+        <div key={Date.now + index}>
           Name: {item.name}, sex: {item.sex}
         </div>
       ))}
