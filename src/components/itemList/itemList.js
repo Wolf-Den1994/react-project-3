@@ -8,78 +8,83 @@ const ListGroupItem = styled.li`
   cursor: pointer;
 `;
 
-export default class ItemList extends Component {
-  constructor() {
-    super();
-    this.id = null;
-  }
-
-  state = {
-    itemList: null,
-    error: false,
-  };
-
-  static defaultProps = {
-    onItemSelected: () => {},
-  };
-
-  static propTypes = {
-    onItemSelected: PropTypes.func,
-  };
-
-  componentDidCatch() {
-    this.setState((state) => {
-      return { ...state, error: true };
-    });
-  }
-
-  componentDidMount() {
-    const { getData } = this.props;
-
-    getData().then((itemList) => {
-      this.setState((state) => {
-        const newState = itemList.map((item) => {
-          return { ...item, id: this.id++ };
-        });
-        const result = { ...state, itemList: newState };
-        return result;
-      });
-    });
-  }
-
-  renderItems(arr) {
+const ItemList = ({ data, renderItem, onItemSelected }) => {
+  const renderItems = (arr) => {
     return arr.map((item) => {
       const { id } = item;
-      const labal = this.props.renderItem(item);
+      const labal = renderItem(item);
       return (
         <ListGroupItem
           key={id}
           className="list-group-item"
-          onClick={() => this.props.onItemSelected(id)}
+          onClick={() => onItemSelected(id)}
         >
           {labal}
         </ListGroupItem>
       );
     });
-  }
+  };
+  const items = renderItems(data);
+  return (
+    <ul style={{ marginBottom: 15 }} className="item-list list-group">
+      {items}
+    </ul>
+  );
+};
 
-  render() {
-    const { itemList, error } = this.state;
-
-    if (error) {
-      return <ErrorMessage />;
+const withData = (View, getData) => {
+  return class extends Component {
+    constructor() {
+      super();
+      this.id = null;
     }
 
-    if (!itemList) {
-      return <Spinner />;
+    state = {
+      data: null,
+      error: false,
+    };
+
+    static defaultProps = {
+      onItemSelected: () => {},
+    };
+
+    static propTypes = {
+      onItemSelected: PropTypes.func,
+    };
+
+    componentDidCatch() {
+      this.setState((state) => {
+        return { ...state, error: true };
+      });
     }
 
-    const items = this.renderItems(itemList);
+    componentDidMount() {
+      const { getData } = this.props;
+      getData().then((data) => {
+        this.setState((state) => {
+          const newState = data.map((item) => {
+            return { ...item, id: this.id++ };
+          });
+          const result = { ...state, data: newState };
+          return result;
+        });
+      });
+    }
 
-    return (
-      <ul style={{ marginBottom: 15 }} className="item-list list-group">
-        {items}
-      </ul>
-    );
-  }
-}
+    render() {
+      const { data, error } = this.state;
+
+      if (error) {
+        return <ErrorMessage />;
+      }
+
+      if (!data) {
+        return <Spinner />;
+      }
+
+      return <View {...this.props} data={data} />;
+    }
+  };
+};
+
+export default withData(ItemList);
