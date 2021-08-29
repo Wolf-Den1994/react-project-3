@@ -1,9 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './workWithHooks.scss';
 
 const NewApp = () => {
   const [count, setCount] = useState(0);
   const [data, refreshData] = useState([{ name: 'Den', sex: 'male' }]);
+
+  const updateChar = () => {
+    console.log(Math.random());
+  }
+
+  useEffect(() => {
+    updateChar();
+    let timerId = setInterval(updateChar, 5000);
+    return () => {
+      clearInterval(timerId);
+    }
+  });
 
   return (
     <div className="hooooks">
